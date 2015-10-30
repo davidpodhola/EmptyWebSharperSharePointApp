@@ -10,12 +10,20 @@ namespace EmptyWebSharperSharePointAppWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         protected void Application_Start()
         {
+            log4net.Config.XmlConfigurator.Configure();
+            log.Info("Application starting");
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            log.Info("Application started");
         }
     }
 }

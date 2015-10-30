@@ -49,6 +49,10 @@
       <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -173,9 +177,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="WebSharper.AspNetMvc, Version=3.5.0.0, Culture=neutral, PublicKeyToken=dcd983dec8f76a71, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebSharper.AspNetMvc.3.5.6.36\lib\net40\WebSharper.AspNetMvc.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="WebSharper.AspNetMvc, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\websharper.aspnetmvc\WebSharper.AspNetMvc\bin\Debug\WebSharper.AspNetMvc.dll</HintPath>
     </Reference>
     <Reference Include="WebSharper.Collections, Version=3.5.0.0, Culture=neutral, PublicKeyToken=dcd983dec8f76a71, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSharper.3.5.14.215\lib\net40\WebSharper.Collections.dll</HintPath>
@@ -231,6 +235,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\home2Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\SharePointContextFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -262,6 +267,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\spcontext.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\home2\Main.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -276,6 +282,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\home2\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -291,7 +298,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebSharperApplication\WebSharperApplication.fsproj">
-      <Project>{32e7056e-e2b8-46a4-ae68-0f49a76ba47a}</Project>
+      <Project>{6ae3f8fd-fd3d-45a2-b578-4a84ad26e29a}</Project>
       <Name>WebSharperApplication</Name>
     </ProjectReference>
   </ItemGroup>
