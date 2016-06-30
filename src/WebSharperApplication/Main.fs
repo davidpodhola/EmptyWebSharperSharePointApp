@@ -46,7 +46,7 @@ module Site =
     open Microsoft.SharePoint.Client
 
     let SharePointContextUser () =
-        let spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext.Current)
+        let spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext.Current, true)
         use clientContext = spContext.CreateUserClientContextForSPHost()
         let spUser = clientContext.Web.CurrentUser;
         clientContext.Load<Microsoft.SharePoint.Client.User>(

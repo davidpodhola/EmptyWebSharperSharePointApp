@@ -400,7 +400,7 @@ namespace SharePointContext
         /// </summary>
         /// <param name="httpRequest">The HTTP request.</param>
         /// <returns>The SharePointContext instance. Returns <c>null</c> if errors occur.</returns>
-        public SharePointContext CreateSharePointContext(HttpRequestBase httpRequest)
+        public SharePointContext CreateSharePointContext(HttpRequestBase httpRequest, bool throwOnReturningNull = false)
         {
             if (httpRequest == null)
             {
@@ -411,6 +411,7 @@ namespace SharePointContext
             Uri spHostUrl = SharePointContext.GetSPHostUrl(httpRequest);
             if (spHostUrl == null)
             {
+                if (throwOnReturningNull) throw new ArgumentNullException("spHostUrl");
                 return null;
             }
 
@@ -427,6 +428,7 @@ namespace SharePointContext
             string spLanguage = httpRequest.QueryString[SharePointContext.SPLanguageKey];
             if (string.IsNullOrEmpty(spLanguage))
             {
+                if (throwOnReturningNull) throw new ArgumentNullException("spLanguage");
                 return null;
             }
 
@@ -434,6 +436,7 @@ namespace SharePointContext
             string spClientTag = httpRequest.QueryString[SharePointContext.SPClientTagKey];
             if (string.IsNullOrEmpty(spClientTag))
             {
+                if (throwOnReturningNull) throw new ArgumentNullException("spClientTag");
                 return null;
             }
 
@@ -441,10 +444,13 @@ namespace SharePointContext
             string spProductNumber = httpRequest.QueryString[SharePointContext.SPProductNumberKey];
             if (string.IsNullOrEmpty(spProductNumber))
             {
+                if (throwOnReturningNull) throw new ArgumentNullException("spProductNumber");
                 return null;
             }
 
-            return CreateSharePointContext(spHostUrl, spAppWebUrl, spLanguage, spClientTag, spProductNumber, httpRequest);
+            var result = CreateSharePointContext(spHostUrl, spAppWebUrl, spLanguage, spClientTag, spProductNumber, httpRequest, throwOnReturningNull);
+            if (throwOnReturningNull && result==null) throw new ArgumentNullException("CreateSharePointContext2");
+            return result;
         }
 
         /// <summary>
@@ -462,7 +468,7 @@ namespace SharePointContext
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
         /// <returns>The SharePointContext instance. Returns <c>null</c> if not found and a new instance can't be created.</returns>
-        public SharePointContext GetSharePointContext(HttpContextBase httpContext)
+        public SharePointContext GetSharePointContext(HttpContextBase httpContext, bool throwOnReturningNull = false)
         {
             if (httpContext == null)
             {
@@ -472,6 +478,7 @@ namespace SharePointContext
             Uri spHostUrl = SharePointContext.GetSPHostUrl(httpContext.Request);
             if (spHostUrl == null)
             {
+                if (throwOnReturningNull) throw new ArgumentNullException("spHostUrl");
                 return null;
             }
 
@@ -479,14 +486,15 @@ namespace SharePointContext
 
             if (spContext == null || !ValidateSharePointContext(spContext, httpContext))
             {
-                spContext = CreateSharePointContext(httpContext.Request);
+                spContext = CreateSharePointContext(httpContext.Request, throwOnReturningNull);
 
                 if (spContext != null)
                 {
                     SaveSharePointContext(spContext, httpContext);
-                }
+                } else if (throwOnReturningNull) throw new ArgumentNullException("CreateSharePointContext");
             }
 
+            if (throwOnReturningNull && spContext == null ) throw new ArgumentNullException("LoadSharePointContext");
             return spContext;
         }
 
@@ -495,9 +503,9 @@ namespace SharePointContext
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
         /// <returns>The SharePointContext instance. Returns <c>null</c> if not found and a new instance can't be created.</returns>
-        public SharePointContext GetSharePointContext(HttpContext httpContext)
+        public SharePointContext GetSharePointContext(HttpContext httpContext, bool throwOnReturningNull = false)
         {
-            return GetSharePointContext(new HttpContextWrapper(httpContext));
+            return GetSharePointContext(new HttpContextWrapper(httpContext), throwOnReturningNull);
         }
 
         /// <summary>
@@ -510,7 +518,8 @@ namespace SharePointContext
         /// <param name="spProductNumber">The SharePoint product number.</param>
         /// <param name="httpRequest">The HTTP request.</param>
         /// <returns>The SharePointContext instance. Returns <c>null</c> if errors occur.</returns>
-        protected abstract SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, HttpRequestBase httpRequest);
+        protected abstract SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, 
+            HttpRequestBase httpRequest, bool throwOnError );
 
         /// <summary>
         /// Validates if the given SharePointContext can be used with the specified HTTP context.
@@ -687,11 +696,13 @@ namespace SharePointContext
         private const string SPContextKey = "SPContext";
         private const string SPCacheKeyKey = "SPCacheKey";
 
-        protected override SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, HttpRequestBase httpRequest)
+        protected override SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, 
+            HttpRequestBase httpRequest, bool throwOnError)
         {
             string contextTokenString = TokenHelper.GetContextTokenFromRequest(httpRequest);
             if (string.IsNullOrEmpty(contextTokenString))
             {
+                if (throwOnError) throw new ArgumentNullException("contextTokenString");
                 return null;
             }
 
@@ -702,10 +713,12 @@ namespace SharePointContext
             }
             catch (WebException)
             {
+                if (throwOnError) throw;
                 return null;
             }
             catch (AudienceUriValidationFailedException)
             {
+                if (throwOnError) throw;
                 return null;
             }
 
@@ -879,11 +892,13 @@ namespace SharePointContext
     {
         private const string SPContextKey = "SPContext";
 
-        protected override SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, HttpRequestBase httpRequest)
+        protected override SharePointContext CreateSharePointContext(Uri spHostUrl, Uri spAppWebUrl, string spLanguage, string spClientTag, string spProductNumber, 
+            HttpRequestBase httpRequest, bool throwOnError)
         {
             WindowsIdentity logonUserIdentity = httpRequest.LogonUserIdentity;
             if (logonUserIdentity == null || !logonUserIdentity.IsAuthenticated || logonUserIdentity.IsGuest || logonUserIdentity.User == null)
             {
+                if (throwOnError) throw new ArgumentNullException("logonUserIdentity");
                 return null;
             }
 

@@ -10,7 +10,7 @@
     <RootNamespace>EmptyWebSharperSharePointApp</RootNamespace>
     <AssemblyName>EmptyWebSharperSharePointApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetOfficeVersion>15.0</TargetOfficeVersion>
+    <TargetOfficeVersion>16.1</TargetOfficeVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
@@ -22,6 +22,7 @@
     <WorkflowPartId>{52afb8d3-47fc-44aa-84e9-9d8cb3c72617}</WorkflowPartId>
     <CspkgPartId>{00d8a6a3-4502-424f-a2fa-061c886b6494}</CspkgPartId>
     <SqlPackagePartId>{297d6d98-9d92-432f-a235-078114efba2a}</SqlPackagePartId>
+    <ActivePublishProfile>EmptyWebSharperSharePointAppWeb - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
